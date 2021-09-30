@@ -1,0 +1,89 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+
+public class ShootingManagerTank : MonoBehaviour
+{
+    [Header("Bullet Prefabs")]
+    public GameObject redBulletPrefab;
+    public GameObject blueBulletPrefab;
+
+    [Header("Tank Fire Points")]
+    public Transform redFirePoint;
+    public Transform blueFirePoint;
+
+    [Header("Bullet Attributes")]
+    public float bulletSpeed;
+    public int timeToBulletDestruction;
+
+    [Header("Ammo Counts")]
+    public int startingAmmoCount = 5;
+    private int redAmmoCount;
+    private int blueAmmoCount;
+
+    [Header("Ammo Refill")]
+    [SerializeField] private float timeTillAmmoRefill;
+    [SerializeField] private float currentAmmoRefillTime;
+
+    [Header("AmmoLabels")]
+    public TextMeshProUGUI blueAmmoLabel;
+    public TextMeshProUGUI redAmmoLabel;
+    private string blueAmmoString;
+    private string redAmmoString;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        redAmmoCount = startingAmmoCount;
+        blueAmmoCount = startingAmmoCount;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        AmmoReload();
+    }
+
+    public void Shoot(string color)
+    {
+        if (color == "blue")
+        {
+            if (blueAmmoCount > 0)
+            {
+                GameObject bullet = Instantiate(blueBulletPrefab, blueFirePoint.position, blueFirePoint.rotation);
+                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                rb.AddForce(blueFirePoint.up * bulletSpeed * Time.deltaTime, ForceMode2D.Impulse);
+                Destroy(bullet, timeToBulletDestruction);
+                blueAmmoCount--;
+            }
+        }
+
+        if (color == "red")
+        {
+            if (redAmmoCount > 0)
+            {
+                GameObject bullet = Instantiate(redBulletPrefab, redFirePoint.position, redFirePoint.rotation);
+                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+                rb.AddForce(redFirePoint.up * bulletSpeed * Time.de, ForceMode2D.Impulse);
+                Destroy(bullet, timeToBulletDestruction);
+                redAmmoCount--;
+            }
+
+        }
+
+
+    }
+
+    void AmmoReload()
+    {
+        currentAmmoRefillTime += Time.deltaTime;
+
+        if (currentAmmoRefillTime >= timeTillAmmoRefill)
+        {
+            redAmmoCount = startingAmmoCount;
+            blueAmmoCount = startingAmmoCount;
+            currentAmmoRefillTime = 0;
+        }
+    }
+}

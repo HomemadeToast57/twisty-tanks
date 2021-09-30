@@ -1,0 +1,33 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraShakeController : MonoBehaviour
+{
+
+    public CameraShake shake;
+    // Start is called before the first frame update
+    void Start()
+    {
+        shake = gameObject.GetComponent<CameraShake>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void ShakeCam(bool isOn)
+    {
+        if (isOn)
+        {
+            shake.enabled = true;
+        }
+        else if (!isOn)
+        {
+            shake.enabled = false;
+        }
+
+    }
+}
